@@ -12,7 +12,8 @@ import numpy as np
 import os
 import pandas as pd
 from scipy.integrate import solve_ivp
-
+workspace0 = 'workspace/'
+os.makedirs(workspace0, exist_ok=True)
 ####################################################################################################
 v1= -0.01
 v2= 0.15
@@ -65,8 +66,9 @@ def swallow_HCO(t,y):
 
 
 ### ODE settings
-tab0 = pd.read_csv('baseline_ic.csv')
+tab0 = pd.read_csv(workspace0+'baseline_ic.csv')
 init_conds = np.array([tab0.V_A.values[0], tab0.w_A.values[0], tab0.V_B.values[0],tab0.w_B.values[0]])
+# init_conds = np.array([1,0,0,1])
 
 ####################################################################################################
 ### simulate
@@ -116,7 +118,7 @@ ax2.plot(neuron3.t, neuron3.y[2],'--',c='orangered')
 ax1.set_ylim([-0.9,0.3])
 ax2.set_ylim([-0.9,0.3])
 ### output data
-output_path = 'prototype_HCO/'
+output_path = 'quiescent_HCO/'
 os.makedirs(output_path, exist_ok=True)
 ax1.legend()
 f1.savefig(output_path+'traces_.png')
@@ -124,7 +126,7 @@ f1.savefig(output_path+'traces_.png')
 tab1 = pd.DataFrame()
 nrow = {'V_A':neuron3.y[0,-1],'V_B':neuron3.y[2,-1],'w_A':neuron3.y[1,-1],'w_B':neuron3.y[3,-1]}
 tab1 = tab1.append(nrow, ignore_index=True)
-tab1.to_csv('baseline_ic.csv')
+tab1.to_csv(workspace0+'baseline_ic.csv')
 print(nrow)
 
 V = np.arange(-1,1,0.01)
